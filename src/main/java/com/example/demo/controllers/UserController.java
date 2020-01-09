@@ -8,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.dto.UserDTO;
 import com.example.demo.services.UserService;
 
 @RestController
@@ -30,6 +33,34 @@ public class UserController {
 			response.put("data", "No se encuentran usuarios Registrados");
 		} else {
 			response.put("data", userService.getUsuarios());
+		}
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.ACCEPTED);
+	}
+
+	@GetMapping("getUsersByName/{name}")
+	public ResponseEntity<?> getUsersByName(@PathVariable String name) {
+		Map<String, Object> response = new HashMap<>();
+
+		UserDTO userDTO = userService.getUserByName(name);
+
+		if (userDTO == null) {
+			response.put("data", "Usuario no existente");
+		} else {
+			response.put("data", userDTO);
+		}
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.ACCEPTED);
+	}
+
+	@GetMapping("findByName/{name}")
+	public ResponseEntity<?> findByName(@PathVariable String name) {
+		Map<String, Object> response = new HashMap<>();
+
+		UserDTO userDTO = userService.findByName(name);
+
+		if (userDTO == null) {
+			response.put("data", "Usuario no existente");
+		} else {
+			response.put("data", userDTO);
 		}
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.ACCEPTED);
 	}
